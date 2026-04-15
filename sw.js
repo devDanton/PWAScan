@@ -1,13 +1,15 @@
-const CACHE_NAME = 'scanner-mvp-v1';
+const CACHE_NAME = 'PWAScan-v2';
 const urlsToCache = [
     './',
     './index.html',
     './app.js',
     './manifest.json',
-    'https://unpkg.com/html5-qrcode'
+    'https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js', // URL exata corrigida
+    './src/img/icon.svg',
+    './src/img/icon-192.png',
+    './src/img/icon-512.png'
 ];
 
-// Instalação: Baixa e guarda os arquivos necessários
 self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(CACHE_NAME)
@@ -17,7 +19,6 @@ self.addEventListener('install', event => {
     );
 });
 
-// Intercepta as requisições: Retorna do cache se estiver offline
 self.addEventListener('fetch', event => {
     event.respondWith(
         caches.match(event.request)
