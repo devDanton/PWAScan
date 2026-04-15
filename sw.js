@@ -1,4 +1,4 @@
-const CACHE_NAME = 'scanner-mvp-v1';
+const CACHE_NAME = 'PWAScan-v1';
 const urlsToCache = [
     './',
     './index.html',
