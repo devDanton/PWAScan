@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Scanner MVP</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            color: #333;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        button,
+        input[type="file"] {
+            padding: 12px;
+            font-size: 1rem;
+            margin: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+
+        button {
+            background-color: #0056b3;
+            color: white;
+            border: none;
+            font-weight: bold;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        #reader {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            display: none;
+        }
+
+        /* Alerta visual de tela cheia */
+        #feedback {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem;
+            font-weight: bold;
+            color: white;
+            z-index: 9999;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        #feedback span {
+            font-size: 1.5rem;
+            margin-top: 10px;
+            word-break: break-all;
+        }
+
+        .bg-success {
+            background-color: #28a745;
+        }
+
+        .bg-danger {
+            background-color: #dc3545;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Leitor de Chassi</h1>
+
+    <div class="card">
+        <h3>1. Carregar Lista (JSON)</h3>
+        <p>Formato esperado: <code>["CHASSI1", "CHASSI2"]</code></p>
+        <input type="file" id="fileInput" accept=".json">
+        <p id="listStatus">Nenhuma lista carregada.</p>
+    </div>
+
+    <div class="card">
+        <h3>2. Câmera</h3>
+        <button id="startScanBtn">Iniciar Leitor</button>
+        <button id="stopScanBtn" style="display:none; background-color: #6c757d;">Parar Leitor</button>
+        <div id="reader"></div>
+    </div>
+
+    <div class="card">
+        <h3>3. Exportar Registros</h3>
+        <button id="exportBtn" style="background-color: #28a745;">Baixar Registros Lidos</button>
+    </div>
+
+    <div id="feedback">
+        <div id="feedbackMsg">LIBERADO</div>
+        <span id="feedbackChassi"></span>
+    </div>
+
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="app.js"></script>
+    <script>
+        // Registrar o Service Worker para funcionamento Offline
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(() => console.log("Service Worker Registrado!"))
+                .catch(err => console.error("Erro no Service Worker:", err));
+        }
+    </script>
+</body>
+
+</html>
