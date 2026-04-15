@@ -4,9 +4,9 @@ const urlsToCache = [
     './index.html',
     './app.js',
     './manifest.json',
-    'https://unpkg.com/html5-qrcode'
+    'https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js', // URL exata corrigida
+    '/src/img/icon.svg' // É bom colocar o ícone no cache também
 ];
-
 // Instalação: Baixa e guarda os arquivos necessários
 self.addEventListener('install', event => {
     event.waitUntil(
