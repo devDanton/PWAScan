@@ -1,21 +1,24 @@
 <html lang="pt-BR" data-theme="dark">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Scanner de Chassi — leitura e validação offline via QR Code e código de barras">
-    <meta name="theme-color" content="#01696f">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Scanner Chassi</title>
-    <link rel="manifest" href="manifest.json">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;600&family=Inter:wght@300..700&display=swap"
-        rel="stylesheet">
-    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
-    <style>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description"
+            content="Scanner de Chassi — leitura e validação offline via QR Code e código de barras">
+        <meta name="theme-color" content="#01696f">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style"
+            content="black-translucent">
+        <title>Scanner Chassi</title>
+        <link rel="manifest" href="manifest.json">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;600&family=Inter:wght@300..700&display=swap"
+            rel="stylesheet">
+        <script
+            src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+        <style>
         :root,
         [data-theme="light"] {
             --color-bg: #f7f6f2;
@@ -739,191 +742,233 @@
             }
         }
     </style>
-</head>
+    </head>
 
-<body>
+    <body>
 
-    <a href="#main" class="sr-only">Pular para conteúdo principal</a>
+        <a href="#main" class="sr-only">Pular para conteúdo principal</a>
 
-    <header class="app-header">
-        <div class="logo">
-            <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
-                <rect x="1" y="1" width="10" height="10" rx="2.5" fill="currentColor" />
-                <rect x="15" y="1" width="10" height="10" rx="2.5" fill="currentColor" opacity=".45" />
-                <rect x="1" y="15" width="10" height="10" rx="2.5" fill="currentColor" opacity=".45" />
-                <rect x="15" y="15" width="10" height="10" rx="2.5" fill="currentColor" opacity=".18" />
-            </svg>
-            <span>Scanner Chassi</span>
-        </div>
-        <div class="header-actions">
-            <div id="offline-badge"
-                style="display:none;font-size:var(--text-xs);background:color-mix(in oklch,var(--color-warning) 15%,var(--color-surface));color:var(--color-warning);padding:2px var(--space-2);border-radius:var(--radius-full);border:1px solid color-mix(in oklch,var(--color-warning) 25%,var(--color-border))">
-                ● Offline</div>
-            <button class="theme-toggle" data-theme-toggle aria-label="Alternar tema">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+        <header class="app-header">
+            <div class="logo">
+                <svg width="26" height="26" viewBox="0 0 26 26" fill="none"
+                    aria-hidden="true">
+                    <rect x="1" y="1" width="10" height="10" rx="2.5"
+                        fill="currentColor" />
+                    <rect x="15" y="1" width="10" height="10" rx="2.5"
+                        fill="currentColor" opacity=".45" />
+                    <rect x="1" y="15" width="10" height="10" rx="2.5"
+                        fill="currentColor" opacity=".45" />
+                    <rect x="15" y="15" width="10" height="10" rx="2.5"
+                        fill="currentColor" opacity=".18" />
                 </svg>
-            </button>
-        </div>
-    </header>
-
-    <nav class="app-nav" role="tablist" aria-label="Seções do app">
-        <button class="nav-btn active" role="tab" aria-selected="true" data-tab="scanner">▣ Scanner</button>
-        <button class="nav-btn" role="tab" aria-selected="false" data-tab="importar">⊞ Importar Lista</button>
-        <button class="nav-btn" role="tab" aria-selected="false" data-tab="registros">≡ Registros</button>
-    </nav>
-
-    <main class="main" id="main">
-
-        <!-- SCANNER -->
-        <section id="panel-scanner" class="tab-panel active" role="tabpanel">
-            <div class="stats-row">
-                <div class="stat-chip">
-                    <div class="value" id="stat-lista">0</div>
-                    <div class="label">Na lista</div>
-                </div>
-                <div class="stat-chip">
-                    <div class="value" id="stat-lidos">0</div>
-                    <div class="label">Leituras</div>
-                </div>
-                <div class="stat-chip">
-                    <div class="value" id="stat-liberados">0</div>
-                    <div class="label">Liberados</div>
-                </div>
+                <span>Scanner Chassi</span>
             </div>
-
-            <div id="result-banner" role="alert" aria-live="assertive">
-                <div id="result-icon" style="font-size:3rem;line-height:1"></div>
-                <div id="result-status" class="result-status"></div>
-                <div id="result-chassi" class="result-chassi"></div>
-                <button class="btn btn-ghost" id="btn-continuar" style="margin-top:var(--space-2)">Escanear
-                    próximo</button>
+            <div class="header-actions">
+                <div id="offline-badge"
+                    style="display:none;font-size:var(--text-xs);background:color-mix(in oklch,var(--color-warning) 15%,var(--color-surface));color:var(--color-warning);padding:2px var(--space-2);border-radius:var(--radius-full);border:1px solid color-mix(in oklch,var(--color-warning) 25%,var(--color-border))">
+                    ● Offline</div>
+                <button class="theme-toggle" data-theme-toggle
+                    aria-label="Alternar tema">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                    </svg>
+                </button>
             </div>
+        </header>
 
-            <div class="card" id="scanner-card">
-                <p class="card-title">Câmera / Leitor</p>
-                <div id="scanner-container">
-                    <div id="reader"></div>
-                    <div class="scanner-overlay" aria-hidden="true">
-                        <div class="scan-frame">
-                            <div class="c-br"></div>
-                            <div class="c-bl"></div>
-                            <div class="scan-line"></div>
+        <nav class="app-nav" role="tablist" aria-label="Seções do app">
+            <button class="nav-btn active" role="tab" aria-selected="true"
+                data-tab="scanner">▣ Scanner</button>
+            <button class="nav-btn" role="tab" aria-selected="false"
+                data-tab="importar">⊞ Importar Lista</button>
+            <button class="nav-btn" role="tab" aria-selected="false"
+                data-tab="registros">≡ Registros</button>
+        </nav>
+
+        <main class="main" id="main">
+
+            <!-- SCANNER -->
+            <section id="panel-scanner" class="tab-panel active"
+                role="tabpanel">
+                <div class="stats-row">
+                    <div class="stat-chip">
+                        <div class="value" id="stat-lista">0</div>
+                        <div class="label">Na lista</div>
+                    </div>
+                    <div class="stat-chip">
+                        <div class="value" id="stat-lidos">0</div>
+                        <div class="label">Leituras</div>
+                    </div>
+                    <div class="stat-chip">
+                        <div class="value" id="stat-liberados">0</div>
+                        <div class="label">Liberados</div>
+                    </div>
+                </div>
+
+                <div id="result-banner" role="alert" aria-live="assertive">
+                    <div id="result-icon"
+                        style="font-size:3rem;line-height:1"></div>
+                    <div id="result-status" class="result-status"></div>
+                    <div id="result-chassi" class="result-chassi"></div>
+                    <button class="btn btn-ghost" id="btn-continuar"
+                        style="margin-top:var(--space-2)">Escanear
+                        próximo</button>
+                </div>
+
+                <div class="card" id="scanner-card">
+                    <p class="card-title">Câmera / Leitor</p>
+                    <div id="scanner-container">
+                        <div id="reader"></div>
+                        <div class="scanner-overlay" aria-hidden="true">
+                            <div class="scan-frame">
+                                <div class="c-br"></div>
+                                <div class="c-bl"></div>
+                                <div class="scan-line"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="scanner-btns">
+                        <button class="btn btn-primary" id="btn-start">▶ Iniciar
+                            câmera</button>
+                        <button class="btn btn-ghost" id="btn-stop" disabled>■
+                            Parar</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <p class="card-title">Entrada manual</p>
+                    <div class="input-group">
+                        <input type="text" class="input-text" id="manual-input"
+                            placeholder="Digite ou cole o chassi…"
+                            autocomplete="off" autocorrect="off"
+                            spellcheck="false">
+                        <button class="btn btn-primary"
+                            id="btn-validar">Validar</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- IMPORTAR -->
+            <section id="panel-importar" class="tab-panel" role="tabpanel">
+                <div class="card">
+                    <p class="card-title">Importar allowlist</p>
+                    <p
+                        style="font-size:var(--text-sm);color:var(--color-text-muted);margin-bottom:var(--space-4)">Carregue
+                        um arquivo <strong>CSV</strong> ou <strong>JSON</strong>
+                        com os chassis permitidos. O arquivo é
+                        processado 100% localmente — nenhum dado sai do
+                        dispositivo.</p>
+                    <div class="drop-zone" id="drop-zone" tabindex="0"
+                        role="button" aria-label="Clique ou arraste arquivo">
+                        <div class="drop-icon" aria-hidden="true">📂</div>
+                        <div
+                            style="font-size:var(--text-sm);font-weight:500">Arraste
+                            o arquivo ou clique para selecionar
+                        </div>
+                        <div class="drop-subtitle">CSV (uma coluna) · JSON
+                            (array de strings) · até 10 MB</div>
+                    </div>
+                    <input type="file" id="file-input"
+                        accept=".csv,.json,text/plain" style="display:none"
+                        aria-hidden="true">
+                    <p id="import-status"
+                        style="font-size:var(--text-sm);color:var(--color-text-muted);margin-top:var(--space-3)"></p>
+                </div>
+
+                <div class="card" id="lista-preview" style="display:none">
+                    <div
+                        style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-4)">
+                        <p class="card-title" style="margin-bottom:0">Lista
+                            carregada (<span id="lista-count">0</span>)</p>
+                        <button class="btn btn-danger"
+                            id="btn-limpar-lista">Limpar</button>
+                    </div>
+                    <div
+                        style="display:flex;flex-direction:column;gap:var(--space-2);max-height:260px;overflow-y:auto"
+                        id="lista-items"></div>
+                </div>
+
+                <div class="card">
+                    <p class="card-title">Formatos aceitos</p>
+                    <div style="display:flex;gap:var(--space-4);flex-wrap:wrap">
+                        <div style="flex:1;min-width:140px">
+                            <p
+                                style="font-size:var(--text-xs);color:var(--color-text-muted);margin-bottom:var(--space-2)">
+                                CSV</p>
+                            <pre
+                                style="background:var(--color-surface-offset);border-radius:var(--radius-md);padding:var(--space-3);font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-text-muted);overflow-x:auto;line-height:1.7">9BWZZZ377VT004251
+1HGCM82633A004352
+JM1BK34F7701234</pre>
+                        </div>
+                        <div style="flex:1;min-width:140px">
+                            <p
+                                style="font-size:var(--text-xs);color:var(--color-text-muted);margin-bottom:var(--space-2)">
+                                JSON</p>
+                            <pre
+                                style="background:var(--color-surface-offset);border-radius:var(--radius-md);padding:var(--space-3);font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-text-muted);overflow-x:auto;line-height:1.7">["9BWZZZ377VT004251",
+ "1HGCM82633A004352",
+ "JM1BK34F7701234"]</pre>
                         </div>
                     </div>
                 </div>
-                <div class="scanner-btns">
-                    <button class="btn btn-primary" id="btn-start">▶ Iniciar câmera</button>
-                    <button class="btn btn-ghost" id="btn-stop" disabled>■ Parar</button>
-                </div>
-            </div>
+            </section>
 
-            <div class="card">
-                <p class="card-title">Entrada manual</p>
-                <div class="input-group">
-                    <input type="text" class="input-text" id="manual-input" placeholder="Digite ou cole o chassi…"
-                        autocomplete="off" autocorrect="off" spellcheck="false">
-                    <button class="btn btn-primary" id="btn-validar">Validar</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- IMPORTAR -->
-        <section id="panel-importar" class="tab-panel" role="tabpanel">
-            <div class="card">
-                <p class="card-title">Importar allowlist</p>
-                <p style="font-size:var(--text-sm);color:var(--color-text-muted);margin-bottom:var(--space-4)">Carregue
-                    um arquivo <strong>CSV</strong> ou <strong>JSON</strong> com os chassis permitidos. O arquivo é
-                    processado 100% localmente — nenhum dado sai do dispositivo.</p>
-                <div class="drop-zone" id="drop-zone" tabindex="0" role="button" aria-label="Clique ou arraste arquivo">
-                    <div class="drop-icon" aria-hidden="true">📂</div>
-                    <div style="font-size:var(--text-sm);font-weight:500">Arraste o arquivo ou clique para selecionar
-                    </div>
-                    <div class="drop-subtitle">CSV (uma coluna) · JSON (array de strings) · até 10 MB</div>
-                </div>
-                <input type="file" id="file-input" accept=".csv,.json,text/plain" style="display:none"
-                    aria-hidden="true">
-                <p id="import-status"
-                    style="font-size:var(--text-sm);color:var(--color-text-muted);margin-top:var(--space-3)"></p>
-            </div>
-
-            <div class="card" id="lista-preview" style="display:none">
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-4)">
-                    <p class="card-title" style="margin-bottom:0">Lista carregada (<span id="lista-count">0</span>)</p>
-                    <button class="btn btn-danger" id="btn-limpar-lista">Limpar</button>
-                </div>
-                <div style="display:flex;flex-direction:column;gap:var(--space-2);max-height:260px;overflow-y:auto"
-                    id="lista-items"></div>
-            </div>
-
-            <div class="card">
-                <p class="card-title">Formatos aceitos</p>
-                <div style="display:flex;gap:var(--space-4);flex-wrap:wrap">
-                    <div style="flex:1;min-width:140px">
-                        <p style="font-size:var(--text-xs);color:var(--color-text-muted);margin-bottom:var(--space-2)">
-                            CSV</p>
-                        <pre
-                            style="background:var(--color-surface-offset);border-radius:var(--radius-md);padding:var(--space-3);font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-text-muted);overflow-x:auto;line-height:1.7">9BWZZZ377VT004251
-1HGCM82633A004352
-JM1BK34F7701234</pre>
-                    </div>
-                    <div style="flex:1;min-width:140px">
-                        <p style="font-size:var(--text-xs);color:var(--color-text-muted);margin-bottom:var(--space-2)">
-                            JSON</p>
-                        <pre
-                            style="background:var(--color-surface-offset);border-radius:var(--radius-md);padding:var(--space-3);font-family:var(--font-mono);font-size:var(--text-xs);color:var(--color-text-muted);overflow-x:auto;line-height:1.7">["9BWZZZ377VT004251",
- "1HGCM82633A004352",
- "JM1BK34F7701234"]</pre>
+            <!-- REGISTROS -->
+            <section id="panel-registros" class="tab-panel" role="tabpanel">
+                <div
+                    style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-3)">
+                    <h2
+                        style="font-size:var(--text-lg);font-weight:600">Histórico
+                        de leituras</h2>
+                    <div style="display:flex;gap:var(--space-2);flex-wrap:wrap">
+                        <button class="btn btn-primary" id="btn-exportar">↓
+                            JSON</button>
+                        <button class="btn btn-ghost" id="btn-exportar-csv">↓
+                            CSV</button>
+                        <button class="btn btn-danger"
+                            id="btn-limpar-registros">Limpar</button>
                     </div>
                 </div>
-            </div>
-        </section>
 
-        <!-- REGISTROS -->
-        <section id="panel-registros" class="tab-panel" role="tabpanel">
-            <div
-                style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-3)">
-                <h2 style="font-size:var(--text-lg);font-weight:600">Histórico de leituras</h2>
-                <div style="display:flex;gap:var(--space-2);flex-wrap:wrap">
-                    <button class="btn btn-primary" id="btn-exportar">↓ JSON</button>
-                    <button class="btn btn-ghost" id="btn-exportar-csv">↓ CSV</button>
-                    <button class="btn btn-danger" id="btn-limpar-registros">Limpar</button>
+                <div id="registros-empty" class="empty-state">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="1.5"
+                        style="opacity:.3" aria-hidden="true">
+                        <path
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <p>Nenhuma leitura ainda. Use o scanner ou a entrada manual
+                        para começar.</p>
                 </div>
-            </div>
 
-            <div id="registros-empty" class="empty-state">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
-                    style="opacity:.3" aria-hidden="true">
-                    <path
-                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                <p>Nenhuma leitura ainda. Use o scanner ou a entrada manual para começar.</p>
-            </div>
+                <div id="registros-table-wrap" class="log-table-wrap"
+                    style="display:none">
+                    <table aria-label="Histórico de leituras">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Chassi</th>
+                                <th>Status</th>
+                                <th>Data/Hora</th>
+                            </tr>
+                        </thead>
+                        <tbody id="registros-body"></tbody>
+                    </table>
+                </div>
+            </section>
 
-            <div id="registros-table-wrap" class="log-table-wrap" style="display:none">
-                <table aria-label="Histórico de leituras">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Chassi</th>
-                            <th>Status</th>
-                            <th>Data/Hora</th>
-                        </tr>
-                    </thead>
-                    <tbody id="registros-body"></tbody>
-                </table>
-            </div>
-        </section>
+        </main>
 
-    </main>
+        <div class="toast-wrap" id="toast-wrap" aria-live="polite"
+            aria-atomic="false"></div>
 
-    <div class="toast-wrap" id="toast-wrap" aria-live="polite" aria-atomic="false"></div>
+        <script src="app.js"></script>
 
-    <script src="app.js"></script>
-
-    <script>
+        <script>
         if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js').catch(() => { }); }
     </script>
-</body>
+    </body>
 
 </html>
