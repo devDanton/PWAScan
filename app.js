@@ -1,4 +1,6 @@
-/* State */
+/* ==========================================
+   State
+   ========================================== */
 let allowlist = new Set();
 let registros = [];
 let scanner = null;
@@ -21,7 +23,9 @@ function persist() {
   } catch (e) { }
 }
 
-/* Theme */
+/* ==========================================
+   Theme
+   ========================================== */
 (function () {
   const t = document.querySelector('[data-theme-toggle]');
   const r = document.documentElement;
@@ -37,7 +41,9 @@ function persist() {
   t.addEventListener('click', () => { d = d === 'dark' ? 'light' : 'dark'; r.setAttribute('data-theme', d); upd(); });
 })();
 
-/* Tabs */
+/* ==========================================
+   Tabs
+   ========================================== */
 document.querySelectorAll('.nav-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.nav-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
@@ -49,7 +55,9 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
   });
 });
 
-/* Toast */
+/* ==========================================
+   Toast
+   ========================================== */
 function toast(msg, type = 'info') {
   const wrap = document.getElementById('toast-wrap');
   const el = document.createElement('div');
@@ -68,7 +76,9 @@ function updateStats() {
   document.getElementById('stat-liberados').textContent = registros.filter(r => r.status === 'liberado').length.toLocaleString('pt-BR');
 }
 
-/* Validate */
+/* ==========================================
+   Validate
+   ========================================== */
 function validateChassi(chassi, silent = false) {
   console.log('Validando chassi:', chassi)
   if (!chassi || chassi.trim() === '') return;
@@ -89,10 +99,10 @@ function validateChassi(chassi, silent = false) {
     awaitingNext = true;
   }
 
+  registros.unshift({ chassi, data_hora: new Date().toLocaleString('pt-BR'), status });
+  persist();
+  updateStats();
   if (found) {
-    registros.unshift({ chassi, data_hora: new Date().toISOString(), status: 'liberado' });
-    persist();
-    updateStats();
     toast('✅ Liberado: ' + chassi, 'ok');
   } else {
     toast('🚫 Bloqueado: ' + chassi, 'err');
@@ -107,7 +117,9 @@ document.getElementById('btn-continuar').addEventListener('click', () => {
   if (scannerRunning) resumeScanner();
 });
 
-/* Manual */
+/* ==========================================
+   Manual
+   ========================================== */
 document.getElementById('btn-validar').addEventListener('click', () => {
   const v = document.getElementById('manual-input').value;
   if (!v.trim()) { toast('Digite um chassi'); return; }
@@ -116,7 +128,9 @@ document.getElementById('btn-validar').addEventListener('click', () => {
 });
 document.getElementById('manual-input').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('btn-validar').click(); });
 
-/* Scanner */
+/* ==========================================
+   Scanner
+   ========================================== */
 function resumeScanner() {
   if (scanner && scanner.getState && scanner.getState() === Html5QrcodeScannerState.PAUSED) {
     try { scanner.resume(); } catch (e) { }
@@ -159,7 +173,10 @@ function stopScanner() {
 document.getElementById('btn-start').addEventListener('click', startScanner);
 document.getElementById('btn-stop').addEventListener('click', stopScanner);
 
-/* Import */
+/* ==========================================
+   Import
+   ========================================== */
+
 function parseFile(file) {
   return new Promise((resolve, reject) => {
     if (file.size > 10_000_000) { reject('Arquivo maior que 10 MB'); return; }
@@ -223,7 +240,10 @@ document.getElementById('btn-limpar-lista').addEventListener('click', () => {
   toast('Lista limpa');
 });
 
-/* Registros */
+/* ==========================================
+   Registros
+   ========================================== */
+
 function renderRegistros() {
   const empty = document.getElementById('registros-empty');
   const wrap = document.getElementById('registros-table-wrap');
@@ -231,12 +251,12 @@ function renderRegistros() {
   if (!registros.length) { empty.style.display = 'flex'; wrap.style.display = 'none'; return; }
   empty.style.display = 'none'; wrap.style.display = '';
   body.innerHTML = registros.map((r, i) => `
-<tr>
-<td style="color:var(--color-text-faint)">${registros.length - i}</td>
-<td>${r.chassi}</td>
-<td><span class="badge ${r.status === 'liberado' ? 'badge-ok' : 'badge-fail'}">${r.status}</span></td>
-<td style="color:var(--color-text-muted)">${new Date(r.data_hora).toLocaleString('pt-BR')}</td>
-</tr>`).join('');
+    <tr>
+      <td style="color:var(--color-text-faint)">${registros.length - i}</td>
+      <td>${r.chassi}</td>
+      <td><span class="badge ${r.status === 'liberado' ? 'badge-ok' : 'badge-fail'}">${r.status}</span></td>
+      <td style="color:var(--color-text-muted)">${r.data_hora}</td>
+    </tr>`).join('');
 }
 
 document.getElementById('btn-exportar').addEventListener('click', () => {
@@ -265,14 +285,21 @@ document.getElementById('btn-limpar-registros').addEventListener('click', () => 
   toast('Registros apagados');
 });
 
-/* Offline */
+/* ==========================================
+   Offline
+   ========================================== */
 function chkOnline() { document.getElementById('offline-badge').style.display = navigator.onLine ? 'none' : ''; }
 window.addEventListener('online', chkOnline); window.addEventListener('offline', chkOnline); chkOnline();
 
-/* Init */
+/* ==========================================
+   Init
+   ========================================== */
 updateStats(); renderListaPreview();
 
-/* ScannerHID */
+
+/* ==========================================
+   Scanner Bluetooth / HID 
+   ========================================== */
 class ScannerHidGlobal {
   constructor(callbackLeitura) {
     this.buffer = '';
@@ -291,7 +318,6 @@ class ScannerHidGlobal {
       }
 
       this.ultimoTempo = tempoAtual;
-
 
       if (event.key === 'Enter') {
         if (this.buffer.length > 0) {
@@ -322,6 +348,9 @@ const leitorBluetooth = new ScannerHidGlobal((chassiLido) => {
   validateChassi(chassiLido);
 });
 
+/* ==========================================
+   Scanner por Imagem
+   ========================================== */
 (function initImageScanner() {
   const fileInput = document.getElementById('img-scan-input');
   if (!fileInput) return;
